@@ -51,6 +51,10 @@ Date windows are computed in code (`tools.search_window`), so the agent searches
 
 The first two use the *same* real disaster, showing the agent discriminates rather than reacting to keywords. Outputs come from an LLM and can vary slightly between runs.
 
+### Create your own scenario
+
+No code changes needed. Edit the claim fields, open **Create your own policy** in the form and enter a policy start date, perils, sum insured, deductible and waiting period. Use a real past disaster for the location and loss date (hazard data is real), with the policy start just after it for an anti-selection case or long before it for a genuine one. Custom claims run on live data. Leave the policy start blank to use the built-in policy for the ID instead; an ID that does not exist is escalated to human review.
+
 ## Run it
 
 ```bash

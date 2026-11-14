@@ -1,0 +1,120 @@
+{
+  "geocode_location": [
+    {
+      "args": {
+        "location": "Kahramanmaras, Turkey"
+      },
+      "output": {
+        "display_name": "Kahramanmara\u015f, Akdeniz B\u00f6lgesi, T\u00fcrkiye",
+        "latitude": 37.7830345,
+        "longitude": 36.830655,
+        "headline": "Located at 37.78, 36.83",
+        "data_mode": "live"
+      }
+    }
+  ],
+  "check_earthquakes": [
+    {
+      "args": {
+        "lat": 37.7830345,
+        "lon": 36.830655,
+        "loss_date": "2023-02-08",
+        "policy_start_date": "2023-02-07",
+        "radius_km": 200,
+        "min_magnitude": 4.5
+      },
+      "output": {
+        "window": "2023-01-09 to 2023-02-10",
+        "earthquake_count": 10,
+        "events": [
+          {
+            "magnitude": 7.8,
+            "place": "Pazarcik earthquake, Kahramanmaras earthquake sequence",
+            "time_utc": "2023-02-06T01:17:34.342000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jllz"
+          },
+          {
+            "magnitude": 7.5,
+            "place": "Elbistan earthquake, Kahramanmaras earthquake sequence",
+            "time_utc": "2023-02-06T10:24:48.811000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlqa"
+          },
+          {
+            "magnitude": 6.7,
+            "place": "14 km E of Nurda??, Turkey",
+            "time_utc": "2023-02-06T01:28:15.784000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlm1"
+          },
+          {
+            "magnitude": 6,
+            "place": "4 km NNE of G\u00f6ksun, Turkey",
+            "time_utc": "2023-02-06T12:02:11.275000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlrc"
+          },
+          {
+            "magnitude": 6,
+            "place": "12 km W of \u00c7elikhan, Turkey",
+            "time_utc": "2023-02-06T10:26:46.742000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jm1y"
+          },
+          {
+            "magnitude": 5.8,
+            "place": "9 km SW of Do?an?ehir, Turkey",
+            "time_utc": "2023-02-06T10:35:58.161000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlqe"
+          },
+          {
+            "magnitude": 5.7,
+            "place": "24 km ENE of Nurda??, Turkey",
+            "time_utc": "2023-02-06T01:26:50.869000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlnn"
+          },
+          {
+            "magnitude": 5.7,
+            "place": "7 km SW of Ye?ilyurt, Turkey",
+            "time_utc": "2023-02-06T10:51:30.994000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlql"
+          },
+          {
+            "magnitude": 5.6,
+            "place": "Turkey-Syria border region",
+            "time_utc": "2023-02-06T01:36:27.357000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlm9"
+          },
+          {
+            "magnitude": 5.5,
+            "place": "8 km ESE of G\u00f6lba??, Turkey",
+            "time_utc": "2023-02-07T03:13:12.754000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jm5e"
+          }
+        ],
+        "headline": "10 quake(s) M4.5+ within 200 km (2023-01-09 to 2023-02-10); largest M7.8 on 2023-02-06",
+        "data_mode": "live"
+      }
+    }
+  ],
+  "search_disaster_news": [
+    {
+      "args": {
+        "location": "Kahramanmaras, Turkey",
+        "query": "earthquake damage",
+        "loss_date": "2023-02-08",
+        "policy_start_date": "2023-02-07"
+      },
+      "output": {
+        "window": "2023-01-09 to 2023-02-10",
+        "articles_found": 1,
+        "articles": [
+          {
+            "title": "Turkey earthquake: Before and after pictures show extent of destruction",
+            "published_date": "Mon, 06 Feb 2023 17:51:27 GMT",
+            "url": "https://www.bbc.com/news/world-europe-64544998",
+            "snippet": "The first earthquake was followed by numerous aftershocks, including one quake which was almost as large as the first - registering as magnitude 7.5 - about nine hours later with its epicentre about 60 miles (100km) further north in the Elbistan district of Kahramanmaras province.\n\nEPA Collapsed bui"
+          }
+        ],
+        "headline": "1 article(s) (2023-01-09 to 2023-02-10); top: Turkey earthquake: Before and after pictures show extent of destruction",
+        "data_mode": "live"
+      }
+    }
+  ]
+}

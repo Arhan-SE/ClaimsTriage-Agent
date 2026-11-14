@@ -1,0 +1,92 @@
+{
+  "geocode_location": [
+    {
+      "args": {
+        "location": "Indiranagar, Bengaluru, India"
+      },
+      "output": {
+        "display_name": "Indiranagar, Jogpalya, Bengaluru Central City Corporation, Bengaluru, Bangalore East, Bengaluru Urban, Karnataka, 560008, India",
+        "latitude": 12.9732913,
+        "longitude": 77.6404672,
+        "headline": "Located at 12.97, 77.64",
+        "data_mode": "live"
+      }
+    }
+  ],
+  "check_rain_and_flood": [
+    {
+      "args": {
+        "lat": 12.9732913,
+        "lon": 77.6404672,
+        "loss_date": "2023-03-15",
+        "policy_start_date": "2021-04-12"
+      },
+      "output": {
+        "window": "2023-02-13 to 2023-03-17",
+        "rainfall_mm": {
+          "total": 4.4,
+          "peak_day": "2023-03-17",
+          "peak_mm": 2.9,
+          "days_over_50mm": []
+        },
+        "river_discharge_m3s": {
+          "baseline_median": 0.02,
+          "peak": 0.85,
+          "peak_day": "2023-03-16",
+          "peak_to_baseline_ratio": null,
+          "note": "Baseline flow is negligible; no meaningful flood signal from river data."
+        },
+        "headline": "rain peak 3 mm on 2023-03-17 (total 4.4 mm); river flow negligible (peak 0.8 m3/s)",
+        "data_mode": "live"
+      }
+    }
+  ],
+  "search_disaster_news": [
+    {
+      "args": {
+        "location": "Indiranagar, Bengaluru, India",
+        "query": "flood damage",
+        "loss_date": "2023-03-15",
+        "policy_start_date": "2021-04-12"
+      },
+      "output": {
+        "window": "2023-02-13 to 2023-03-17",
+        "articles_found": 5,
+        "articles": [
+          {
+            "title": "Low laying area in West Zone of Bangalore BBMP area",
+            "published_date": "Thu, 16 Feb 2023 00:00:00 GMT",
+            "url": "https://www.researchgate.net/figure/Fig-4-Low-laying-area-in-West-Zone-of-Bangalore-BBMP-area_fig1_273277891",
+            "snippet": "Bengaluru, a primary metropolitan centre in India, is currently grappling with the dual crises of urban flooding and severe groundwater depletion. These"
+          },
+          {
+            "title": "Bengaluru loses 29% water supply daily; vehicles main ...",
+            "published_date": "Wed, 01 Mar 2023 00:00:00 GMT",
+            "url": "https://timesofindia.indiatimes.com/city/bengaluru/bengaluru-loses-29-water-supply-daily-vehicles-main-culprits/articleshow/98319801.cms",
+            "snippet": "Of the 1450MLD of water Bangalore Water Supply and Sewerage Board (BWSSB) supplies to the city every day, more than 420 MLD or 29% is lost to leakage."
+          },
+          {
+            "title": "Reel by Dr Ritika Shanmugam (@drritikashanmugam)",
+            "published_date": null,
+            "url": "https://www.instagram.com/reel/Co4JwRVJUqH",
+            "snippet": "Ritika Shanmugam Skin, Hair & Aesthetic Clinic | Indiranagar, Bengaluru 9036203008 (Bridal Skin Care, Bridal Glow, Supplements for Skin and Hair, Pre Bridal"
+          },
+          {
+            "title": "Customer Care",
+            "published_date": "Fri, 24 Feb 2023 00:00:00 GMT",
+            "url": "https://wildcraft.com/customercare",
+            "snippet": "... damage caused by acts of god such as floods, fires or earthquakes. Clothing is not covered by the Wildcraft\u00ae Warranty. When submitting a warranty claim, we"
+          },
+          {
+            "title": "Peri peri cheesy fries \ud83d\udccdXero extravaganza pizza \ud83d\udccdMexican ...",
+            "published_date": null,
+            "url": "https://www.instagram.com/p/CpFd5DQPVqp",
+            "snippet": "If you're in Mumbai and craving authentic Bengaluru-style flavours, add The Bengaluru Caf\u00e9, Juhu to your food bucket list! The Bengaluru Caf\u00e9, Indian"
+          }
+        ],
+        "headline": "5 article(s) (2023-02-13 to 2023-03-17); top: Low laying area in West Zone of Bangalore BBMP area",
+        "data_mode": "live"
+      }
+    }
+  ]
+}

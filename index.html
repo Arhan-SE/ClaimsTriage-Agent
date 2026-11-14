@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ClaimsTriage Agent</title>
+<style>
+  :root {
+    --bg:#f6f7f9; --card:#fff; --ink:#14181f; --mute:#5d6674; --line:#e3e6eb;
+    --brand:#2446d6; --brand-soft:#eaeefc;
+    --green:#117a46; --green-bg:#e4f5ec; --amber:#a35d00; --amber-bg:#fff1d9; --red:#b3261e; --red-bg:#fde8e6;
+    --code:#0f1620;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  header { background:var(--card); border-bottom:1px solid var(--line); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  header h1 { font-size:17px; margin:0; }
+  header p { margin:2px 0 0; color:var(--mute); font-size:12px; }
+  .hbtns { display:flex; gap:8px; }
+  main { max-width:1200px; margin:0 auto; padding:20px 24px 60px; display:grid; grid-template-columns:340px 1fr; gap:20px; align-items:start; }
+  @media (max-width:900px){ main{ grid-template-columns:1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; }
+  .card + .card { margin-top:16px; }
+  h2 { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--mute); margin:0 0 12px; }
+  label { display:block; font-size:12px; font-weight:600; margin:10px 0 4px; }
+  input, select, textarea { width:100%; padding:8px 10px; border:1px solid #cfd4dc; border-radius:8px; font:inherit; background:#fff; }
+  input:focus, select:focus, textarea:focus { outline:2px solid var(--brand); outline-offset:-1px; }
+  textarea { resize:vertical; min-height:64px; }
+  .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  button { font:inherit; cursor:pointer; border-radius:8px; border:1px solid #cfd4dc; background:#fff; padding:7px 12px; color:var(--ink); }
+  button:hover { background:#f1f3f6; }
+  button.primary { background:var(--brand); border-color:var(--brand); color:#fff; font-weight:600; width:100%; padding:10px; margin-top:14px; }
+  button.primary:hover { background:#1b38b4; }
+  button:disabled { opacity:.55; cursor:not-allowed; }
+  .scen { display:block; width:100%; text-align:left; padding:10px 12px; margin-bottom:8px; border-radius:10px; }
+  .scen b { display:block; font-size:13px; }
+  .scen span { color:var(--mute); font-size:12px; }
+  .scen.on { border-color:var(--brand); background:var(--brand-soft); box-shadow:0 0 0 1px var(--brand) inset; }
+  .seg { display:flex; border:1px solid #cfd4dc; border-radius:8px; overflow:hidden; }
+  .seg label { flex:1; margin:0; text-align:center; padding:7px 4px; cursor:pointer; font-weight:500; }
+  .seg input { display:none; }
+  .seg input:checked + span { color:#fff; }
+  .seg label:has(input:checked) { background:var(--brand); color:#fff; }
+  .seg label:has(input:disabled) { opacity:.45; cursor:not-allowed; }
+  .hint { font-size:11px; color:var(--mute); margin-top:6px; }
+
+  /* agent loop stepper */
+  .loop { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .loop .st { padding:6px 12px; border-radius:999px; background:#eef0f3; color:var(--mute); font-size:12px; font-weight:600; }
+  .loop .st.done { background:var(--green-bg); color:var(--green); }
+  .loop .st.now { background:var(--brand); color:#fff; }
+  .loop .arr { color:#b6bcc7; }
+
+  /* feed */
+  #feed > * + * { margin-top:10px; }
+  .box { border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:#fff; }
+  .box h4 { margin:0 0 6px; font-size:12px; }
+  .box ul { margin:0; padding-left:18px; }
+  .box li { margin:2px 0; }
+  .plan { border-color:#c8d3fa; background:var(--brand-soft); }
+  .self { border-color:#e6d3a3; background:#fffaf0; }
+  .cols { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+  .tag { font-size:11px; font-weight:700; padding:2px 7px; border-radius:999px; background:#eef0f3; color:var(--mute); }
+  .tag.live { background:var(--green-bg); color:var(--green); }
+  .tag.rec { background:var(--amber-bg); color:var(--amber); }
+  .tag.fu { background:#efe5ff; color:#5b2db3; }
+  .tool { display:flex; align-items:flex-start; gap:10px; }
+  .dot { width:10px; height:10px; border-radius:50%; margin-top:5px; flex:none; background:#b6bcc7; }
+  .dot.run { background:var(--brand); animation:pulse 1s infinite; }
+  .dot.ok { background:var(--green); } .dot.bad { background:var(--red); }
+  @keyframes pulse { 50% { opacity:.3; } }
+  .tool .t { font-weight:600; }
+  .tool .src { color:var(--mute); font-size:12px; }
+  .tool .head { color:#2d3440; }
+  details summary { cursor:pointer; color:var(--mute); font-size:12px; margin-top:4px; }
+  pre { margin:6px 0 0; background:var(--code); color:#d6deea; padding:10px; border-radius:8px; font-size:11px; overflow:auto; max-height:220px; }
+  .guard { border-color:#f0c36d; background:var(--amber-bg); }
+  .err { border-color:#f0b4af; background:var(--red-bg); color:var(--red); }
+
+  /* result */
+  .tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  @media (max-width:760px){ .tiles{ grid-template-columns:1fr 1fr; } }
+  .tile { border-radius:10px; padding:10px 12px; border:1px solid var(--line); }
+  .tile small { display:block; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--mute); }
+  .tile strong { display:block; font-size:17px; margin:2px 0 4px; }
+  .tile p { margin:0; font-size:12px; color:#2d3440; }
+  .tile.g { background:var(--green-bg); border-color:#bfe5cf; } .tile.g strong { color:var(--green); }
+  .tile.a { background:var(--amber-bg); border-color:#f0d9a8; } .tile.a strong { color:var(--amber); }
+  .tile.r { background:var(--red-bg); border-color:#f3c3be; } .tile.r strong { color:var(--red); }
+  .tile.b { background:var(--brand-soft); border-color:#c8d3fa; } .tile.b strong { color:var(--brand); }
+  .summary { font-size:15px; margin:14px 0 4px; }
+  .conf { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--mute); margin-bottom:6px; }
+  .bar { flex:0 0 140px; height:6px; background:#e6e9ee; border-radius:4px; overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--brand); }
+  .tl { list-style:none; margin:0; padding:0 0 0 6px; }
+  .tl li { position:relative; padding:0 0 12px 22px; border-left:2px solid var(--line); margin-left:5px; }
+  .tl li::before { content:""; position:absolute; left:-7px; top:3px; width:12px; height:12px; border-radius:50%; background:#9aa3b2; border:2px solid #fff; }
+  .tl li.policy::before { background:var(--brand); } .tl li.disaster::before { background:var(--red); } .tl li.loss::before { background:var(--amber); }
+  .tl .d { font-family:ui-monospace,Menlo,monospace; font-size:12px; color:var(--mute); }
+  .tl .gap { display:block; font-size:11px; color:var(--mute); }
+  .ev { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-top:8px; }
+  .ev a { color:var(--brand); word-break:break-all; font-size:12px; }
+  .human { background:#f8f9fb; border:1px dashed #b6bcc7; border-radius:10px; padding:12px; margin-top:14px; }
+  .human .btns { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; align-items:center; }
+  .human select, .human input { width:auto; }
+  .logged { color:var(--green); font-weight:600; }
+  .metrics { font-size:12px; color:var(--mute); margin-top:12px; }
+  .hidden { display:none !important; }
+  .lead { font-size:15px; margin:0 0 14px; }
+  .how { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  @media (max-width:700px){ .how{ grid-template-columns:1fr; } }
+  .how div { background:#f6f7f9; border-radius:10px; padding:12px; }
+  .how i { display:inline-block; width:22px; height:22px; line-height:22px; text-align:center; border-radius:50%; background:var(--brand); color:#fff; font-style:normal; font-size:12px; font-weight:700; margin-bottom:6px; }
+  .how b, .how span { display:block; } .how span { color:var(--mute); font-size:12px; }
+  .more { margin-top:12px; }
+  #feedWrap > summary { font-weight:600; color:var(--ink); font-size:13px; margin:0; }
+  .tile p { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; cursor:pointer; }
+  .tile p.open { -webkit-line-clamp:unset; }
+  details.fold > summary { margin:0; font-weight:600; color:var(--ink); }
+  .errhint { margin-top:6px; font-size:12px; color:var(--mute); }
+  #claimDetails > summary { font-weight:600; color:var(--ink); font-size:13px; margin:12px 0 0; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ClaimsTriage Agent</h1>
+    <p>Disaster-aware claims triage with anti-selection detection · Insurance track · demo with synthetic claims</p>
+  </div>
+  <div class="hbtns">
+    <button id="howBtn" type="button">How it works</button>
+    <button id="auditBtn" type="button">Download audit log</button>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div class="card">
+      <h2>1. Choose a claim</h2>
+      <div id="scenarios"></div>
+      <form id="form" autocomplete="off">
+        <details id="claimDetails"><summary>Claim details (view or edit)</summary>
+        <div class="row">
+          <div><label for="policy_id">Policy ID</label><input id="policy_id" required /></div>
+          <div><label for="claim_type">Peril claimed</label>
+            <select id="claim_type"><option>Earthquake</option><option>Flood</option><option>Storm</option><option>Fire</option></select></div>
+        </div>
+        <label for="location">Loss location</label><input id="location" required />
+        <div class="row">
+          <div><label for="loss_date">Date of loss</label><input id="loss_date" type="date" required /></div>
+          <div><label for="amount">Amount (USD)</label><input id="amount" type="number" min="1" step="any" required /></div>
+        </div>
+        <label for="description">Description</label><textarea id="description" maxlength="1000"></textarea>
+        <details id="polDetails" style="margin-top:12px">
+          <summary style="font-weight:600;color:var(--ink);font-size:12px">Create your own policy (optional)</summary>
+          <div class="hint">Fill in a start date to use these details for this claim. Leave blank to use the built-in policy for the ID above.</div>
+          <div class="row">
+            <div><label for="p_start">Policy start date</label><input id="p_start" type="date" /></div>
+            <div><label for="p_wait">Waiting period (days)</label><input id="p_wait" type="number" min="0" max="365" value="15" /></div>
+          </div>
+          <div class="row">
+            <div><label for="p_sum">Sum insured (USD)</label><input id="p_sum" type="number" min="1" step="any" value="100000" /></div>
+            <div><label for="p_ded">Deductible (USD)</label><input id="p_ded" type="number" min="0" step="any" value="1000" /></div>
+          </div>
+          <label>Perils covered</label>
+          <div id="perils" style="display:flex;gap:12px;flex-wrap:wrap;font-size:13px">
+            <label style="font-weight:400;margin:0"><input type="checkbox" class="peril" value="Earthquake" checked style="width:auto" /> Earthquake</label>
+            <label style="font-weight:400;margin:0"><input type="checkbox" class="peril" value="Flood" checked style="width:auto" /> Flood</label>
+            <label style="font-weight:400;margin:0"><input type="checkbox" class="peril" value="Storm" checked style="width:auto" /> Storm</label>
+            <label style="font-weight:400;margin:0"><input type="checkbox" class="peril" value="Fire" checked style="width:auto" /> Fire</label>
+          </div>
+        </details>
+        <div class="hint">Tip: use a policy ID that doesn't exist and the agent escalates instead of guessing.</div>
+        </details>
+        <label>Evidence source</label>
+        <div class="seg">
+          <label><input type="radio" name="mode" value="live" checked /><span>Live data</span></label>
+          <label><input type="radio" name="mode" value="recorded" id="recMode" /><span>Recorded snapshot</span></label>
+        </div>
+        <div class="hint">Live = real data now. Recorded = saved results (backup).</div>
+        <button id="run" class="primary" type="submit">Run triage</button>
+      </form>
+    </div>
+  </aside>
+
+  <section>
+    <div class="card">
+      <div class="loop" id="loop">
+        <span class="st" data-p="plan">1 Plan</span><span class="arr">›</span>
+        <span class="st" data-p="investigate">2 Investigate</span><span class="arr">›</span>
+        <span class="st" data-p="self">3 Self-check</span><span class="arr">›</span>
+        <span class="st" data-p="decide">4 Recommend</span><span class="arr">›</span>
+        <span class="st" data-p="human">5 Human decides</span>
+      </div>
+    </div>
+
+    <div class="card" id="activity">
+      <div id="explainer">
+        <p class="lead">An AI agent that triages insurance claims after disasters. It checks <b>real</b> earthquake, rainfall and news data, and flags customers who bought cover <b>after</b> the disaster hit.</p>
+        <div class="how">
+          <div><i>1</i><b>Pick a claim</b><span>Choose a scenario on the left.</span></div>
+          <div><i>2</i><b>Watch it investigate</b><span>It plans, calls tools, then checks its own work.</span></div>
+          <div><i>3</i><b>You decide</b><span>It only recommends. A person accepts or overrides.</span></div>
+        </div>
+        <details class="more"><summary>Tools, guardrails and data sources</summary>
+          <p class="hint">Tools: policy lookup and claim history (synthetic) · geocoding (OpenStreetMap) · earthquakes (USGS) · rainfall and river flow (Open-Meteo) · news (Tavily) · date calculator.
+          Plain-code guardrails override unsafe routes (e.g. no auto-approve without evidence). The agent can never reject a claim. Every step is logged. Demo only, not a production underwriting system.</p>
+        </details>
+      </div>
+      <details id="feedWrap" class="hidden" open>
+        <summary id="feedSum">Agent working…</summary>
+        <div id="feed" style="margin-top:10px"></div>
+      </details>
+    </div>
+
+    <div class="card hidden" id="result"></div>
+  </section>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "";
+const pretty = o => { try { return JSON.stringify(typeof o === "string" ? JSON.parse(o) : o, null, 2); } catch { return String(o); } };
+
+let scenarios = [], selected = null, runId = null, phase = null, finished = false;
+
+/* ---------- scenarios & form ---------- */
+function fillForm(c) {
+  $("policy_id").value = c.policy_id; $("claim_type").value = c.claim_type; $("location").value = c.location;
+  $("loss_date").value = c.loss_date; $("amount").value = c.claimed_amount_usd; $("description").value = c.description;
+}
+function renderScenarios() {
+  $("scenarios").innerHTML = scenarios.map(s =>
+    `<button type="button" class="scen ${selected === s.id ? "on" : ""}" data-id="${esc(s.id)}"><b>${esc(s.title)}</b><span>${esc(s.subtitle)}</span></button>`).join("");
+  document.querySelectorAll(".scen").forEach(b => b.onclick = () => selectScenario(b.dataset.id));
+}
+function resetPolicyDetails() {
+  $("p_start").value = ""; $("p_wait").value = 15; $("p_sum").value = 100000; $("p_ded").value = 1000;
+  document.querySelectorAll(".peril").forEach(c => c.checked = true);
+  $("polDetails").open = false;
+}
+function customPolicy() {
+  if (!$("p_start").value) return null;
+  return {
+    policy_start: $("p_start").value,
+    perils_covered: [...document.querySelectorAll(".peril:checked")].map(c => c.value),
+    sum_insured_usd: Number.parseFloat($("p_sum").value),
+    deductible_usd: Number.parseFloat($("p_ded").value),
+    waiting_period_days: Number.parseInt($("p_wait").value, 10)
+  };
+}
+function selectScenario(id) {
+  selected = id; fillForm(scenarios.find(s => s.id === id).claim); resetPolicyDetails();
+  $("recMode").disabled = false; renderScenarios();
+}
+function markCustom() {
+  if (selected === null) return;
+  selected = null; renderScenarios();
+  $("recMode").disabled = true;
+  if ($("recMode").checked) document.querySelector('input[name=mode][value=live]').checked = true;
+}
+["policy_id","claim_type","location","loss_date","amount","description","p_start","p_wait","p_sum","p_ded"]
+  .forEach(id => $(id).addEventListener("input", markCustom));
+document.querySelectorAll(".peril").forEach(c => c.addEventListener("change", markCustom));
+
+/* ---------- stepper ---------- */
+const ORDER = ["plan","investigate","self","decide","human"];
+function setPhase(p) {
+  phase = p; const idx = ORDER.indexOf(p);
+  document.querySelectorAll("#loop .st").forEach(el => {
+    const i = ORDER.indexOf(el.dataset.p);
+    el.className = "st" + (i < idx ? " done" : i === idx ? " now" : "");
+  });
+}
+function allDone() { document.querySelectorAll("#loop .st").forEach(el => el.className = "st done"); }
+
+/* ---------- feed ---------- */
+function add(html, cls = "box") {
+  const d = document.createElement("div"); d.className = cls; d.innerHTML = html; $("feed").appendChild(d); return d;
+}
+const list = a => (a && a.length) ? `<ul>${a.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : `<div class="hint">None</div>`;
+
+function onEvent(type, d) {
+  if (type === "status") {
+    if (d.phase === "decide") setPhase("decide");
+  } else if (type === "plan") {
+    setPhase("plan");
+    add(`<details class="fold"><summary>🧭 Plan · ${d.hypotheses.length} hypotheses · ${d.checks_to_run.length} checks · ${d.checks_skipped.length} skipped</summary><div class="cols" style="margin-top:8px">
+      <div><b>Hypotheses</b>${list(d.hypotheses)}</div>
+      <div><b>Will check</b>${list(d.checks_to_run)}</div>
+      <div><b>Skipping</b>${list(d.checks_skipped)}</div></div></details>`, "box plan");
+  } else if (type === "tool_call") {
+    setPhase("investigate");
+    const fu = d.followup ? ` <span class="tag fu">follow-up after self-check</span>` : "";
+    add(`<div class="tool"><span class="dot run"></span><div style="flex:1">
+      <div><span class="t">${esc(d.label)}</span> <span class="src">· ${esc(d.source)}</span>${fu}</div>
+      <div class="head">running…</div>
+      <details class="tdet"><summary>Details</summary><pre>${esc(pretty(d.arguments))}</pre></details></div></div>`, "box").id = "tool-" + d.id;
+  } else if (type === "tool_output") {
+    const el = $("tool-" + d.id);
+    if (!el) return;
+    el.querySelector(".dot").className = "dot " + (d.ok ? "ok" : "bad");
+    const BADGES = { recorded: `<span class="tag rec">recorded snapshot</span>`, live: `<span class="tag live">live</span>`,
+                     synthetic: `<span class="tag">synthetic data</span>`, calc: "" };
+    const badge = BADGES[d.data_mode] ?? "";
+    el.querySelector(".head").innerHTML = `${esc(d.headline)} ${badge}`;
+    el.querySelector(".tdet").insertAdjacentHTML("beforeend", `<pre>${esc(pretty(d.output))}</pre>`);
+  } else if (type === "self_check") {
+    setPhase("self");
+    add(`<details class="fold"><summary>🔎 Self-check · ${d.supports.length} for · ${d.contradicts.length} against · ${d.gaps.length} gaps</summary><div class="cols" style="margin-top:8px">
+      <div><b>Supports claim</b>${list(d.supports)}</div>
+      <div><b>Contradicts / fraud signals</b>${list(d.contradicts)}</div>
+      <div><b>Gaps</b>${list(d.gaps)}</div></div>
+      <div style="margin-top:8px"><b>Next:</b> ${esc(d.next_step)}</div></details>`, "box self");
+  } else if (type === "guardrail") {
+    add(`<h4>🛡 Guardrail override</h4>${list(d.changes)}`, "box guard");
+  } else if (type === "final") {
+    finished = true; runId = d.run_id; setPhase("human"); renderResult(d.verdict, d.metrics);
+    const steps = $("feed").children.length;
+    $("feedWrap").open = false; $("feedSum").textContent = `Show how the agent got here (${steps} steps) ▸`;
+    $("result").scrollIntoView({ behavior: "smooth", block: "start" });
+  } else if (type === "error") {
+    finished = true; $("feedSum").textContent = "Run stopped";
+    add(`<b>Something went wrong.</b> ${esc(d.message)}<div class="errhint">Check your internet connection and API keys, then try again. If a data source is down, switch to "Recorded snapshot".</div>`, "box err");
+  }
+}
+
+/* ---------- result ---------- */
+const LABEL = { AUTO_APPROVE:"Auto-approve", ADJUSTER_REVIEW:"Adjuster review", FRAUD_UNIT:"Fraud unit", HUMAN_REVIEW:"Human review" };
+const pretty2 = s => String(s).replace(/_/g, " ").toLowerCase().replace(/^./, c => c.toUpperCase());
+const sev = { MINOR:"g", MODERATE:"a", MAJOR:"r" }, cov = { COVERED:"g", NEEDS_REVIEW:"a", NOT_COVERED:"r" }, fr = { LOW:"g", MEDIUM:"a", HIGH:"r" };
+
+function tile(title, value, cls, reason) {
+  return `<div class="tile ${cls}"><small>${title}</small><strong>${esc(value)}</strong><p>${esc(reason)}</p></div>`;
+}
+function timeline(items) {
+  const rows = [...(items || [])].sort((a, b) => a.date.localeCompare(b.date));
+  return `<ul class="tl">${rows.map((e, i) => {
+    let gap = "";
+    if (i > 0) { const n = Math.round((new Date(e.date) - new Date(rows[i-1].date)) / 86400000); if (!isNaN(n)) gap = `<span class="gap">+${n} day${n === 1 ? "" : "s"}</span>`; }
+    return `<li class="${esc(e.kind)}">${gap}<span class="d">${esc(e.date)}</span> ${esc(e.label)}</li>`;
+  }).join("")}</ul>`;
+}
+function renderResult(v, m) {
+  const ev = (v.evidence || []).map(e => {
+    const u = safeUrl(e.url);
+    return `<div class="ev"><b>${esc(e.source)}</b> — ${esc(e.finding)}${u ? `<br><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)}</a>` : ""}</div>`;
+  }).join("") || `<div class="hint">No evidence cited.</div>`;
+  const options = Object.entries(LABEL).map(([k, l]) => `<option value="${k}" ${k === v.route ? "selected" : ""}>${l}</option>`).join("");
+  const r = $("result");
+  r.classList.remove("hidden");
+  r.innerHTML = `
+    <h2>3. Recommendation <span style="text-transform:none;letter-spacing:0">(agent proposes, a human decides)</span></h2>
+    <div class="tiles">
+      ${tile("Severity", pretty2(v.severity), sev[v.severity], v.severity_reason)}
+      ${tile("Coverage", pretty2(v.coverage), cov[v.coverage], v.coverage_reason)}
+      ${tile("Fraud risk", pretty2(v.fraud_risk), fr[v.fraud_risk], v.fraud_reason)}
+      ${tile("Route to", LABEL[v.route], "b", v.route_reason)}
+    </div>
+    <p class="summary">${esc(v.summary)}</p>
+    <div class="conf">Confidence <span class="bar"><i style="width:${v.confidence}%"></i></span> ${v.confidence}%</div>
+    <div class="cols" style="margin-top:14px">
+      <div><h2>Timeline</h2>${timeline(v.timeline)}</div>
+      <div><h2>Evidence</h2>${ev}
+        <h2 style="margin-top:14px">Could not verify</h2>${list(v.limitations)}</div>
+    </div>
+    <div class="human" id="human">
+      <b>Human decision</b>
+      <div class="hint">The agent cannot reject a claim or confirm fraud. Accept or override its route; the decision is written to the audit log.</div>
+      <div class="btns">
+        <button id="accept" class="primary" style="width:auto;margin:0;padding:8px 14px">Accept recommendation</button>
+        <span class="hint" style="margin:0">or override:</span>
+        <select id="ovRoute">${options}</select>
+        <input id="ovNote" placeholder="Reason (optional)" maxlength="500" />
+        <button id="override">Override</button>
+      </div>
+    </div>
+    <div class="metrics">Decided in ${m.seconds}s · ${m.tool_calls} tool calls · ${m.tool_failures} failed · ${esc(m.data_mode)} data · ${esc(m.model)}</div>`;
+  $("accept").onclick = () => decide("accept");
+  $("override").onclick = () => decide("override");
+}
+async function decide(action) {
+  const body = { run_id: runId, action, note: $("ovNote").value };
+  if (action === "override") body.route = $("ovRoute").value;
+  const res = await fetch("/api/decision", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+  if (!res.ok) { $("human").insertAdjacentHTML("beforeend", `<div class="err box" style="margin-top:8px">Could not log decision (${res.status}).</div>`); return; }
+  const j = await res.json();
+  $("human").innerHTML = `<b>Human decision</b><div class="logged" style="margin-top:6px">✓ Logged: final route is ${esc(LABEL[j.final_route])} (${action === "accept" ? "recommendation accepted" : "overridden by human"}).</div>`;
+  allDone();
+}
+
+/* ---------- run ---------- */
+$("form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $("run"); btn.disabled = true;
+  $("explainer").classList.add("hidden"); $("feed").innerHTML = ""; $("result").classList.add("hidden");
+  $("feedWrap").classList.remove("hidden"); $("feedWrap").open = true; $("feedSum").textContent = "● Agent working…";
+  $("claimDetails").open = false;
+  setPhase("plan"); runId = null; finished = false;
+  const payload = {
+    policy_id: $("policy_id").value.trim(), location: $("location").value.trim(), claim_type: $("claim_type").value,
+    loss_date: $("loss_date").value, claimed_amount_usd: parseFloat($("amount").value), description: $("description").value,
+    data_mode: document.querySelector("input[name=mode]:checked").value, scenario_id: selected,
+    custom_policy: customPolicy()
+  };
+  if (payload.custom_policy && payload.custom_policy.perils_covered.length === 0) {
+    onEvent("error", { message: "Select at least one covered peril in your custom policy." });
+    btn.disabled = false; return;
+  }
+  try {
+    const res = await fetch("/api/investigate", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    if (!res.ok) throw new Error("Server returned " + res.status + " (check the form values)");
+    const reader = res.body.getReader(), dec = new TextDecoder(); let buf = "";
+    for (;;) {
+      const { done, value } = await reader.read(); if (done) break;
+      buf += dec.decode(value, { stream: true });
+      const parts = buf.split("\n\n"); buf = parts.pop();
+      for (const p of parts) {
+        let type = "message", data = "";
+        for (const line of p.split("\n")) { if (line.startsWith("event: ")) type = line.slice(7).trim(); else if (line.startsWith("data: ")) data += line.slice(6); }
+        if (data) onEvent(type, JSON.parse(data));
+      }
+    }
+    if (!finished) onEvent("error", { message: "The connection closed before the agent finished." });
+  } catch (err) { onEvent("error", { message: err.message }); }
+  finally { btn.disabled = false; }
+});
+
+$("howBtn").onclick = () => { $("explainer").classList.toggle("hidden"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+$("result").addEventListener("click", e => { if (e.target.closest(".tile p")) e.target.closest(".tile p").classList.toggle("open"); });
+$("auditBtn").onclick = () => { window.location = "/api/audit"; };
+
+fetch("/api/scenarios").then(r => r.json()).then(s => { scenarios = s; selectScenario(s[0].id); });
+</script>
+</body>
+</html>

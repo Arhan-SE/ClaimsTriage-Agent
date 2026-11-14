@@ -1,0 +1,144 @@
+{
+  "geocode_location": [
+    {
+      "args": {
+        "location": "Gaziantep, Turkey"
+      },
+      "output": {
+        "display_name": "Gaziantep, \u015eahinbey, Gaziantep, G\u00fcneydo\u011fu Anadolu B\u00f6lgesi, 27220, T\u00fcrkiye",
+        "latitude": 37.0628317,
+        "longitude": 37.3792617,
+        "headline": "Located at 37.06, 37.38",
+        "data_mode": "live"
+      }
+    }
+  ],
+  "check_earthquakes": [
+    {
+      "args": {
+        "lat": 37.0628317,
+        "lon": 37.3792617,
+        "loss_date": "2023-02-06",
+        "policy_start_date": "2022-06-01",
+        "radius_km": 200,
+        "min_magnitude": 4.5
+      },
+      "output": {
+        "window": "2023-01-07 to 2023-02-08",
+        "earthquake_count": 10,
+        "events": [
+          {
+            "magnitude": 7.8,
+            "place": "Pazarcik earthquake, Kahramanmaras earthquake sequence",
+            "time_utc": "2023-02-06T01:17:34.342000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jllz"
+          },
+          {
+            "magnitude": 7.5,
+            "place": "Elbistan earthquake, Kahramanmaras earthquake sequence",
+            "time_utc": "2023-02-06T10:24:48.811000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlqa"
+          },
+          {
+            "magnitude": 6.7,
+            "place": "14 km E of Nurda??, Turkey",
+            "time_utc": "2023-02-06T01:28:15.784000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlm1"
+          },
+          {
+            "magnitude": 6,
+            "place": "4 km NNE of G\u00f6ksun, Turkey",
+            "time_utc": "2023-02-06T12:02:11.275000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlrc"
+          },
+          {
+            "magnitude": 6,
+            "place": "12 km W of \u00c7elikhan, Turkey",
+            "time_utc": "2023-02-06T10:26:46.742000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jm1y"
+          },
+          {
+            "magnitude": 5.8,
+            "place": "9 km SW of Do?an?ehir, Turkey",
+            "time_utc": "2023-02-06T10:35:58.161000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlqe"
+          },
+          {
+            "magnitude": 5.7,
+            "place": "7 km SW of Ye?ilyurt, Turkey",
+            "time_utc": "2023-02-06T10:51:30.994000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlql"
+          },
+          {
+            "magnitude": 5.7,
+            "place": "24 km ENE of Nurda??, Turkey",
+            "time_utc": "2023-02-06T01:26:50.869000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlnn"
+          },
+          {
+            "magnitude": 5.6,
+            "place": "Turkey-Syria border region",
+            "time_utc": "2023-02-06T01:36:27.357000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jlm9"
+          },
+          {
+            "magnitude": 5.5,
+            "place": "8 km ESE of G\u00f6lba??, Turkey",
+            "time_utc": "2023-02-07T03:13:12.754000+00:00",
+            "url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000jm5e"
+          }
+        ],
+        "headline": "10 quake(s) M4.5+ within 200 km (2023-01-07 to 2023-02-08); largest M7.8 on 2023-02-06",
+        "data_mode": "live"
+      }
+    }
+  ],
+  "search_disaster_news": [
+    {
+      "args": {
+        "location": "Gaziantep, Turkey",
+        "query": "earthquake damage",
+        "loss_date": "2023-02-06",
+        "policy_start_date": "2022-06-01"
+      },
+      "output": {
+        "window": "2023-01-07 to 2023-02-08",
+        "articles_found": 5,
+        "articles": [
+          {
+            "title": "Turkey Earthquake: Gaziantep Castle\u2014Dating Back to Roman Empire\u2014Collapses - Newsweek",
+            "published_date": "Mon, 06 Feb 2023 10:50:34 GMT",
+            "url": "https://www.newsweek.com/turkey-earthquake-gaziantep-castle-dating-back-roman-empire-collapses-1779127",
+            "snippet": "Gaziantep Castle, which lies in the middle of the city of the same name in the south of Turkey, was leveled by the earthquake. The east, south and southeast parts of the historical castle in the central \u015eahinbey district were destroyed by the earthquake, and debris was scattered on the road, reporte"
+          },
+          {
+            "title": "Turkey earthquake: 2,000-year-old Gaziantep Castle damaged - CBS News",
+            "published_date": "Mon, 06 Feb 2023 00:00:00 GMT",
+            "url": "https://www.cbsnews.com/news/earthquake-turkey-gaziantep-castle-roman-era-archeological-site-damaged",
+            "snippet": "An ancient castle in Turkey was one of the historic monuments damaged when major earthquakes hit the country and neighboring Syria, killing more than 2,000 people on Monday. Images show parts of the Gaziantep Castle, which was first built in the 2nd and 3rd centuries AD, during the Roman Empire, cru"
+          },
+          {
+            "title": "Turkey's Gaziantep Castle Partially Destroyed by Early 2023 Earthquake | Snopes.com",
+            "published_date": "Tue, 07 Feb 2023 01:27:59 GMT",
+            "url": "https://www.snopes.com/fact-check/gaziantep-castle-turkey-earthquake",
+            "snippet": "> In Turkey, the powerful quake destroyed a historic castle perched on top a hill in the Turkish city of Gaziantep.\n>\n> Parts of the Gaziantep Castle's walls and watch towers were levelled while other areas of the structure were damaged, images from the region showed.\n>\n> The castle was first used a"
+          },
+          {
+            "title": "Earthquakes batter Turkey, Syria\u2019s historical monuments | Turkey-Syria Earthquake News | Al Jazeera",
+            "published_date": "Tue, 07 Feb 2023 10:49:04 GMT",
+            "url": "https://www.aljazeera.com/news/2023/2/7/earthquakes-damage-turkey-syrias-historic-mosques-and-castles",
+            "snippet": "Known locally as Gaziantep Kalesi, the second-century AD castle at the centre of the Turkish city of Gaziantep, was partially destroyed, with many of its walls and watch towers levelled, and other parts damaged.\n\n\u201cSome of the bastions in the east, south and southeast parts of the historical Gaziante"
+          },
+          {
+            "title": "Earthquakes Damage 2,000-Year-Old Castle in Turkey",
+            "published_date": "Wed, 08 Feb 2023 18:30:53 GMT",
+            "url": "https://www.smithsonianmag.com/smart-news/earthquakes-damage-turkeys-historic-gaziantep-castle-180981597",
+            "snippet": "The damaged castle following the earthquakes on February 6 Mehmet Akif Parlak / Anadolu Agency via Getty Images\n\n \n\nA Roman-era castle was badly damaged by the devastating earthquakes that struck Turkey and Syria on Monday, reports Mehmet Akif Parlak for the Turkish state-run news agency Anadolu. Pa"
+          }
+        ],
+        "headline": "5 article(s) (2023-01-07 to 2023-02-08); top: Turkey Earthquake: Gaziantep Castle\u2014Dating Back to Roman Empire\u2014Collapses - Newsweek",
+        "data_mode": "live"
+      }
+    }
+  ]
+}
