@@ -23,7 +23,7 @@ import httpx
 from agents import RunContextWrapper, function_tool
 from tavily import TavilyClient
 
-from mock_data import CLAIM_HISTORY, POLICIES
+from app.mock_data import CLAIM_HISTORY, POLICIES
 
 # Tools that only record the agent's own reasoning (shown in the UI, not "evidence").
 REASONING_TOOLS = {"record_plan", "self_check"}

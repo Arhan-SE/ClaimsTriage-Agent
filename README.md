@@ -39,7 +39,7 @@ Date windows are computed in code (`tools.search_window`), so the agent searches
 - Unknown policy ID → agent escalates to human review instead of guessing.
 - Meaningless signals are suppressed (e.g. river-flow ratios against a near-zero baseline).
 - Prompt-injection hygiene: tool output and the claim text are treated as untrusted data.
-- **Recorded snapshot mode** replays saved tool results from `fixtures/` if a public data API is down. (The LLM call itself still needs internet.)
+- **Recorded snapshot mode** replays saved tool results from `app/fixtures/` if a public data API is down. (The LLM call itself still needs internet.)
 
 ## Demo scenarios
 
@@ -61,7 +61,7 @@ No code changes needed. Edit the claim fields, open **Create your own policy** i
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env        # then add OPENAI_API_KEY and TAVILY_API_KEY
-python -m uvicorn main:app --port 8000
+python -m uvicorn app.main:app --port 8000
 # open http://localhost:8000
 ```
 
@@ -69,12 +69,18 @@ Optional: `AGENT_MODEL=gpt-4.1` (default). Re-record snapshots with `python scri
 
 ## Files
 
-- `main.py`: FastAPI app, SSE streaming of the agent's steps, human-decision and audit endpoints
-- `agent.py`: output schema, instructions, deterministic guardrails
-- `tools.py`: all tools, live/recorded/record dispatch
-- `mock_data.py`: synthetic policies, claim history, scenarios
-- `index.html`: single-file UI (no build step, no CDN)
-- `fixtures/`: recorded tool outputs · `tests/`: guardrail and date-window tests
+```
+app/
+  main.py        FastAPI app, SSE streaming of the agent's steps, human-decision and audit endpoints
+  agent.py       output schema, instructions, deterministic guardrails
+  tools.py       all tools, live / recorded / record dispatch
+  mock_data.py   synthetic policies, claim history, demo scenarios
+  index.html     single-file UI (no build step, no CDN)
+  fixtures/      recorded tool outputs for "Recorded snapshot" mode
+scripts/         record_fixtures.py (re-record snapshots from live APIs)
+tests/           guardrail and date-window tests
+docs/            event rulebook and design notes
+```
 
 ## Known limitations (honest list)
 

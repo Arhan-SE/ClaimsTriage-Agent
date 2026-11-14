@@ -7,7 +7,7 @@ from typing import List, Literal
 from agents import Agent, ModelSettings
 from pydantic import BaseModel
 
-from tools import ALL_TOOLS, HAZARD_TOOLS, RunCtx
+from app.tools import ALL_TOOLS, HAZARD_TOOLS, RunCtx
 
 MODEL = os.getenv("AGENT_MODEL", "gpt-4.1")
 

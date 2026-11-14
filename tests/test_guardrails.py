@@ -3,8 +3,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from agent import TriageResult, apply_guardrails  # noqa: E402
-from tools import search_window  # noqa: E402
+from app.agent import TriageResult, apply_guardrails  # noqa: E402
+from app.tools import search_window  # noqa: E402
 
 
 def result(**over):

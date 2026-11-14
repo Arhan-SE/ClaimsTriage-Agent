@@ -8,3 +8,4 @@ __pycache__/
 .DS_Store
 audit_log.jsonl
 .pytest_cache/
+.claude/

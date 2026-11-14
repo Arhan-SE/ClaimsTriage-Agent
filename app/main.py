@@ -14,14 +14,15 @@ from fastapi import FastAPI, HTTPException  # noqa: E402
 from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, StreamingResponse  # noqa: E402
 from pydantic import BaseModel, Field  # noqa: E402
 
-from agent import TriageResult, apply_guardrails, build_prompt, triage_agent  # noqa: E402
+from app.agent import TriageResult, apply_guardrails, build_prompt, triage_agent  # noqa: E402
 from agents import Runner  # noqa: E402
-from mock_data import SCENARIOS  # noqa: E402
-from tools import REASONING_TOOLS, TOOL_META, RunCtx  # noqa: E402
+from app.mock_data import SCENARIOS  # noqa: E402
+from app.tools import REASONING_TOOLS, TOOL_META, RunCtx  # noqa: E402
 
-BASE_DIR = Path(__file__).parent
+BASE_DIR = Path(__file__).parent  # app/
+ROOT_DIR = BASE_DIR.parent
 FIXTURE_DIR = BASE_DIR / "fixtures"
-AUDIT_FILE = BASE_DIR / "audit_log.jsonl"
+AUDIT_FILE = ROOT_DIR / "audit_log.jsonl"
 
 MAX_RUN_SECONDS = 150
 

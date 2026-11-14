@@ -21,16 +21,16 @@ load_dotenv(ROOT / ".env")
 
 from agents import Runner  # noqa: E402
 
-from agent import apply_guardrails, build_prompt, triage_agent  # noqa: E402
-from mock_data import SCENARIOS  # noqa: E402
-from tools import RunCtx  # noqa: E402
+from app.agent import apply_guardrails, build_prompt, triage_agent  # noqa: E402
+from app.mock_data import SCENARIOS  # noqa: E402
+from app.tools import RunCtx  # noqa: E402
 
 
 async def record(scenario: dict) -> None:
     ctx = RunCtx(mode="record")
     res = await Runner.run(triage_agent, input=build_prompt(scenario["claim"]), context=ctx, max_turns=14)
     final, changes = apply_guardrails(res.final_output, ctx.tool_log)
-    out = ROOT / "fixtures" / f"{scenario['id']}.json"
+    out = ROOT / "app" / "fixtures" / f"{scenario['id']}.json"
     out.write_text(json.dumps(ctx.captured, indent=2))
     print(f"\n=== {scenario['id']} ===")
     print(f"tools: {[t['name'] + ('' if t['ok'] else ' (FAILED)') for t in ctx.tool_log]}")
